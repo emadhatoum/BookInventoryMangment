@@ -1,0 +1,83 @@
+﻿@model BookInventoryViewModel
+@using BookInventoryMangmentEF.Models
+
+@{
+    ViewData["Title"] = "CRUD Applications | Books";
+}
+
+<script type="text/javascript">
+    function openLocation(url) {
+        window.location.href = url;
+    }
+    function confirmDelete(id) {
+        $("#hdnDeleteRecipeId").val(id);
+        $("#deleteModal").modal("show");
+        
+    }
+    function cancelDelete() {
+        $("#hdnDeleteRecipeId").val(0);
+        $("#deleteModal").modal("hide");      
+    }
+    function deleteRecipe() {
+        var id = $("#hdnDeleteRecipeId").val();
+        window.location.href = "/BookInventory/Delete/" + id;
+    }
+</script>
+
+<input type="hidden" id="hdnDeleteRecipeId" value="0" />
+
+<div id="results" class="text-center">
+    @* @if (!String.IsNullOrEmpty(Model.ActionMessage)) *@
+    @* { *@
+    @*     string colorClass = Model.IsActionSuccess ? "alert-success" : "alert-danger"; *@
+    @* *@
+    @*     <div class="alert @colorClass alert-dismissible fade show" role="alert"> *@
+    @*         <strong>@Model.ActionMessage</strong> *@
+    @*         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> *@
+    @*             <span aria-hidden="true">&times;</span> *@
+    @*         </button> *@
+    @*     </div> *@
+    @* } *@
+
+    <h1 class="display-4">Books</h1>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table">
+                <tr>
+                    <th>Book Name</th>
+                    <th>Book Author</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th colspan="2"><button type="button" onclick="javascript:openLocation('/BookInventory/Update/0')" class="btn btn-success btn-sm">ADD NEW Book</button></th>
+                </tr>
+
+                @foreach ( BookInventory book in Model.BooklList)
+                {
+                    <tr>
+                        <td>@book.BookName</td>
+                        <td>@book.Author</td>
+                        <td>@book.Quantity</td>
+                        <td>@book.Price</td>
+                        <td><button type="button" onclick="javascript:openLocation('/BookInventory/Update/@book.BookId')" class="btn btn-secondary btn-sm">EDIT</button></td>
+                        <td><button type="button" onclick="javascript:confirmDelete(@book.BookId)" class="btn btn-danger btn-sm">DELETE</button></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">CONFIRM DELETE</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this book?</p>
+                <button type="button" onclick="javascript:cancelDelete()" class="btn btn-secondary btn-sm">CANCEL</button> 
+                <button type="button" onclick="javascript:deleteRecipe()" class="btn btn-danger btn-sm">DELETE</button>
+            </div>
+        </div>
+    </div>
+</div>
